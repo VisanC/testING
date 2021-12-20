@@ -31,21 +31,14 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestParam String userName, @RequestParam String userEmail, @RequestParam String password){
         int result = userService.registerUser(userName,userEmail,password);
-        ResponseEntity<String> res;
 
-        switch(result){
-            case 0:
-                res=new ResponseEntity<String>("Registration successful",HttpStatus.OK);
-                break;
-            case 1:
-                res =new  ResponseEntity<String>("User already exists",HttpStatus.INTERNAL_SERVER_ERROR);
-                break;
-            case 2:
-                res =new  ResponseEntity<String>("Your password is too weak.Please use 8+ characters including digits",HttpStatus.INTERNAL_SERVER_ERROR);
-                break;
-            default:
-                res =new  ResponseEntity<String>("Unknown error",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        ResponseEntity<String> res = switch(result){
+            case 0 -> new ResponseEntity<String>("Registration successful",HttpStatus.OK);
+            case 1 -> new  ResponseEntity<String>("User already exists",HttpStatus.INTERNAL_SERVER_ERROR);
+            case 2 -> new  ResponseEntity<String>("Your password is too weak.Please use 8+ characters including digits",HttpStatus.INTERNAL_SERVER_ERROR);
+            default -> new  ResponseEntity<String>("Unknown error",HttpStatus.INTERNAL_SERVER_ERROR);
+        };
         LOGGER.info(res.toString());
         return res;
 
