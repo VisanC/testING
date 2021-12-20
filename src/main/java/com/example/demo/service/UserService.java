@@ -61,7 +61,7 @@ public class UserService {
     }
 
     public boolean checkPasswordStrenght(String password){
-        return password.length() > 8 && password.matches(".*[0-9]*.");
+        return password.length() > 8 && password.matches(".*\\d+.*");
     }
 
     public boolean checkNameIsUnique(String userName){
