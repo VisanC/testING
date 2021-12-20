@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+    private static final Logger LOGGER= LoggerFactory.getLogger(UserService.class);
+
 
     final int SUCCESSFUL_REGISTER=0;
     final int USER_EXISTS=1;
@@ -44,6 +48,7 @@ public class UserService {
        user.setPassword(encryptedPassword);
        user.setFailedLoginAttempts(0);
        user.setLastLoginAttempt(now);
+       LOGGER.info("Registering user {}", user);
        userRepository.save(user);
        return SUCCESSFUL_REGISTER;
     }
@@ -60,11 +65,11 @@ public class UserService {
     }
 
     public boolean checkNameIsUnique(String userName){
-        return userRepository.findByuserName(userName).isPresent();
+        return !userRepository.findByuserName(userName).isPresent();
     }
 
     public boolean checkEmailIsUnique(String email){
-        return userRepository.findByuserEmail(email).isPresent();
+        return !userRepository.findByuserEmail(email).isPresent();
     }
 
     public void updateUserOnFailedLogin(String user){
@@ -72,6 +77,8 @@ public class UserService {
         currentUser.setFailedLoginAttempts(currentUser.getFailedLoginAttempts()+1);
         currentUser.setLastLoginAttempt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(currentUser);
+        LOGGER.info("Failed login on user {}, updating values",currentUser.getUserName());
+
     }
 
     public void updateUserOnSuccessfulLogin(String user) {
@@ -79,5 +86,6 @@ public class UserService {
         currentUser.setFailedLoginAttempts(0);
         currentUser.setLastLoginAttempt(new Timestamp(System.currentTimeMillis()));
         userRepository.save(currentUser);
+        LOGGER.info("Successful login on user {}, updating values",currentUser.getUserName());
     }
 }

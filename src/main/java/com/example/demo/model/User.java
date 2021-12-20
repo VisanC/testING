@@ -79,4 +79,17 @@ public class User {
     public void setFailedLoginAttempts(int failedLoginAttempts) {
         this.failedLoginAttempts = failedLoginAttempts;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", lastLoginAttempt=" + lastLoginAttempt +
+                ", userEmail='" + userEmail + '\'' +
+                ", failedLoginAttempts=" + failedLoginAttempts +
+                '}';
+    }
 }
