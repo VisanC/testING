@@ -6,13 +6,19 @@ import java.sql.Timestamp;
 @Table(name="users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+    @Column
     private String userName;
+    @Column
     private String password;
+    @Column
     private Timestamp registrationDate;
-    private Timestamp lastSuccessfulLogin;
+    @Column
+    private Timestamp lastLoginAttempt;
+    @Column
     private String userEmail;
+    @Column
     private int failedLoginAttempts;
 
     public User() {
@@ -50,12 +56,12 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
-    public Timestamp getLastSuccessfulLogin() {
-        return lastSuccessfulLogin;
+    public Timestamp getLastLoginAttempt() {
+        return lastLoginAttempt;
     }
 
-    public void setLastSuccessfulLogin(Timestamp lastSuccessfulLogin) {
-        this.lastSuccessfulLogin = lastSuccessfulLogin;
+    public void setLastLoginAttempt(Timestamp lastLoginAttempt) {
+        this.lastLoginAttempt = lastLoginAttempt;
     }
 
     public String getUserEmail() {
